@@ -1,0 +1,18 @@
+.rodriguez {}
+  .rodriguez__tabs {}
+    .rodriguez__tab {
+      display: inline-block;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .rodriguez__tab.rodriguez-current {
+      font-weight: bold;
+    }
+  .rodriguez__panels {}
+    .rodriguez__panel {
+      display: none;
+    }
+    .rodriguez__panel.rodriguez-current {
+      display: block;
+    }
+}

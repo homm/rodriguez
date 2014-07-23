@@ -6,7 +6,7 @@
       padding: 8px;
     }
     .rodriguez__tab.rodriguez-current {
-      font-weight: bold;
+      color: #888;
     }
   .rodriguez__panels {}
     .rodriguez__panel {

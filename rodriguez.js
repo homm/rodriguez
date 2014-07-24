@@ -23,6 +23,7 @@
       var $panels = $('<div/>', {'class': plugin + '__panels'});
       var tabs = [];
       var current;
+      var firstHtml;
 
       function switchTab(index) {
         current = index;
@@ -85,7 +86,13 @@
 
           $panel = $source;
 
-          if (current == null) {
+          if (firstHtml == null) {
+            firstHtml = tabs.length;
+          }
+        }
+
+        if (current == null) {
+          if ($source.data('default')) {
             current = tabs.length;
           }
         }
@@ -95,7 +102,7 @@
 
       $container.prepend([$tabs, $panels]);
       if (tabs.length) {
-        switchTab(current || 0);
+        switchTab(current || firstHtml || 0);
       }
     });
   };

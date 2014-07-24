@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Embedder</title>
+  <meta charset="UTF-8">
   <script charset="utf-8" src="http://yandex.st/jquery/1.11.1/jquery.min.js"></script>
   <script charset="utf-8" src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://yandex.st/highlightjs/8.0/styles/github.min.css" />
@@ -111,13 +112,170 @@
       </div>
     </script>
 
-    <div data-add-source="false">
+    <div data-add-source="false" data-default="true">
       Not so bold text.
     </div>
   </div>
 
   <div class="rodriguez">
+    <script type="x-text/javascript">
+      // ConcreteComponent (класс для последующего декорирования)
+      function Coffee() {
+          this.cost = function() {
+        return 1;
+          };
+      }
+       
+      // Decorator A
+      function Milk(coffee) {
+          this.cost = function() {
+        return coffee.cost() + 0.5;
+          };  
+      }
+       
+      // Decorator B
+      function Whip(coffee) {
+          this.cost = function() {
+        return coffee.cost() + 0.7;
+          };
+      }
+       
+      // Decorator C
+      function Sprinkles(coffee) {
+          this.cost = function() {
+        return coffee.cost() + 0.2;
+          };
+      }
+       
+      // Можно использовать, например, так:
+      var coffee = new Milk(new Whip(new Sprinkles(new Coffee())));
+      alert( coffee.cost() );
+       
+      // Или более наглядно:
+      var coffee = new Coffee();
+      coffee = new Sprinkles(coffee);
+      coffee = new Whip(coffee);
+      coffee = new Milk(coffee);
+      alert(coffee.cost());
+    </script>
 
+    <script type="text/python">
+      from abc import ABCMeta, abstractmethod
+       
+      class IOperator(object):
+          """
+          Интерфейс, который должны реализовать как декоратор,
+          так и оборачиваемый объект.
+          """
+          __metaclass__ = ABCMeta
+       
+          @abstractmethod
+          def operator(self):
+              pass
+       
+       
+      class Component(IOperator):
+          """Компонент программы"""
+          def operator(self):
+              return 10.0
+       
+       
+      class Wrapper(IOperator):
+          """Декоратор"""
+          def __init__(self, obj):
+              self.obj = obj
+       
+          def operator(self):
+              return self.obj.operator() + 5.0
+       
+       
+      comp = Component()
+      comp = Wrapper(comp)
+      print comp.operator()
+    </script>
+
+    <script type="text/php" data-default="true">
+      abstract class AbstractComponent {
+          abstract public function operation();
+      }
+       
+      class ConcreteComponent extends AbstractComponent {
+          public function operation() {
+              // ...
+          }
+      }
+       
+      abstract class AbstractDecorator extends AbstractComponent {
+          protected $_component;
+       
+          public function __construct(AbstractComponent $component) {
+              $this->_component = $component;
+          }
+      }
+       
+      class ConcreteDecorator extends AbstractDecorator {
+          public function operation() {
+              // ... расширенная функциональность ...       
+              $this->_component->operation();       
+              // ... расширенная функциональность ...
+          }
+      }
+       
+      $decoratedComponent = new ConcreteDecorator(
+          new ConcreteComponent()
+      );
+       
+      $decoratedComponent->operation();
+    </script>
+
+    <script type="text/cpp">
+      #include <iostream>
+      #include <memory>
+       
+      class IComponent {
+      public:
+        virtual void operation() = 0;
+              virtual ~IComponent(){}
+      };
+       
+      class Component : public IComponent {
+      public:
+        virtual void operation() {
+          std::cout<<"World!"<<std::endl;
+        }
+      };
+       
+      class DecoratorOne : public IComponent {
+        std::shared_ptr<IComponent> m_component;
+       
+      public:
+        DecoratorOne(IComponent* component): m_component(component) {}
+       
+        virtual void operation() {
+          std::cout << ", ";
+          m_component->operation();
+        }
+      };
+       
+      class DecoratorTwo : public IComponent {
+        std::shared_ptr<IComponent> m_component;
+       
+      public:
+        DecoratorTwo(IComponent* component): m_component(component) {}
+       
+        virtual void operation() {
+          std::cout << "Hello";
+          m_component->operation();
+        }
+      };
+       
+      int main() {
+        DecoratorTwo obj(new DecoratorOne(new Component()));
+        obj.operation(); // prints "Hello, World!\n"
+       
+        return 0;
+      }
+    </script>
   </div>  
 
 </body>

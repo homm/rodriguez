@@ -53,42 +53,50 @@
       }
 
       $container.find('> *').each(function() {
-        var $panel = $(this);
+        var $source = $(this);
+        var $panel;
         var caption;
-        if ($panel.data('skip')) {
+        if ($source.data('skip')) {
           return;
         }
 
-        if ($panel.is('script') || $panel.is('style')) {
-          caption = $panel.attr('type').split('/').pop();
+        if ($source.is('script') || $source.is('style')) {
+          caption = $source.attr('type').split('/').pop();
           $panel = $('<pre/>', {
               'class': 'language-' + caption,
-              'text': normalizeText($panel.text())
+              'text': normalizeText($source.text())
             });
           if (window.hljs) {
             hljs.highlightBlock($panel[0]);
           }
         } else {
           caption = 'result';
-          var $source = $('<pre/>', {
-              'class': 'language-html',
-              'text': normalizeText($panel.html())
-            });
-          if (window.hljs) {
-            hljs.highlightBlock($source[0]);
+
+          if ($source.data('add-source') !== false) {
+            $panel = $('<pre/>', {
+                'class': 'language-html',
+                'text': normalizeText($source.html())
+              });
+            if (window.hljs) {
+              hljs.highlightBlock($panel[0]);
+            }
+            insertTab($panel, 'html');
           }
-          insertTab($source, 'html');
+
+          $panel = $source;
 
           if (current == null) {
             current = tabs.length;
           }
         }
 
-        insertTab($panel, caption);
+        insertTab($panel, $source.data('name') || caption);
       });
 
       $container.prepend([$tabs, $panels]);
-      switchTab(current || 0);
+      if (tabs.length) {
+        switchTab(current || 0);
+      }
     });
   };
 
